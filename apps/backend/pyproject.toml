@@ -1,0 +1,9 @@
+[project]
+name = "backend-api"
+version = "0.1.0"
+description = "FastAPI backend for k8s-microservices-demo"
+dependencies = [
+    "fastapi>=0.110.0",
+    "uvicorn[standard]>=0.29.0",
+]
+requires-python = ">=3.12"
