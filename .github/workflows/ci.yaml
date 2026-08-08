@@ -50,20 +50,24 @@ jobs:
           push: false
           tags: local/container-platform-frontend:test
 
-# --- 3. Kubernetes Manifests Validation ---
-      - name: Set up Kubectl
-        uses: azure/setup-kubectl@v3
+      # --- 3. Kubernetes Local Cluster (KIND) & Dry-Run ---
+      - name: Set up Kubernetes Cluster (KIND)
+        uses: engineerd/setup-kind@v5
         with:
-          version: 'latest'
+          version: v0.22.0
 
-      - name: Dry-Run Manifests
+      - name: Test Cluster Connection
         run: |
-          echo "==> Running dry-run check on K8s manifests..."
-          kubectl version --client
-          kubectl apply --dry-run=client --validate=false -f k8s/namespace.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/configmap.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/secrets.yaml
-          kubectl apply --dry-run=client --validate=false -f k8s/database/
-          kubectl apply --dry-run=client --validate=false -f k8s/backend/
-          kubectl apply --dry-run=client --validate=false -f k8s/frontend/
-          kubectl apply --dry-run=client --validate=false -f k8s/ingress.yaml
+          kubectl cluster-info
+          kubectl get nodes
+
+      - name: Run Server-Side Dry-Run on Manifests
+        run: |
+          echo "==> Running server-side dry-run check on K8s manifests..."
+          kubectl apply --dry-run=server -f k8s/namespace.yaml
+          kubectl apply --dry-run=server -f k8s/configmap.yaml
+          kubectl apply --dry-run=server -f k8s/secrets.yaml
+          kubectl apply --dry-run=server -f k8s/database/
+          kubectl apply --dry-run=server -f k8s/backend/
+          kubectl apply --dry-run=server -f k8s/frontend/
+          kubectl apply --dry-run=server -f k8s/ingress.yaml
