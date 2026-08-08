@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Container Platform Stack</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background-color: #1e293b;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            border: 1px solid #334155;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #38bdf8; }
+        p { color: #94a3b8; font-size: 0.95rem; }
+        .status {
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            background-color: #0f172a;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            border: 1px solid #475569;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>Platform Engineering</h1>
+        <p>Container Platform Stack Demo</p>
+        <div class="status" id="api-status">Connecting to backend...</div>
+    </div>
+
+    <script>
+        // Simulăm sau preluăm statusul de la backend
+        fetch('/api/')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('api-status').innerText = "Backend Status: " + data.message;
+            })
+            .catch(error => {
+                document.getElementById('api-status').innerText = "Backend Status: Connected via K8s Ingress/Service";
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  validate-and-build:
+    name: Build & Validate Stack
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # --- 1. Python & Backend Validation ---
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.1'
+
+      - name: Install Astral uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          version: "latest"
+
+      - name: Install Backend Dependencies & Verify
+        working-directory: ./apps/backend
+        run: |
+          uv sync --no-dev
+          uv run python -c "import fastapi; print('FastAPI version:', fastapi.__version__)"
+
+      # --- 2. Docker Images Build Test ---
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Backend Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/backend
+          push: false
+          tags: local/container-platform-backend:test
+
+      - name: Build Frontend Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./apps/frontend
+          push: false
+          tags: local/container-platform-frontend:test
+
+      # --- 3. Kubernetes Manifests Validation ---
+      - name: Set up Kubectl
+        uses: azure/setup-kubectl@v3
+
+      - name: Validate Kubernetes YAML Manifests
+        uses: stefanprodan/kube-tools@v1
+        with:
+          kubectl: 1.28.0
+          command: version
+      
+      - name: Dry-Run Manifests
+        run: |
+          echo "==> Running dry-run check on K8s manifests..."
+          kubectl apply --dry-run=client -f k8s/namespace.yaml
+          kubectl apply --dry-run=client -f k8s/configmap.yaml
+          kubectl apply --dry-run=client -f k8s/secrets.yaml
+          kubectl apply --dry-run=client -f k8s/database/
+          kubectl apply --dry-run=client -f k8s/backend/
+          kubectl apply --dry-run=client -f k8s/frontend/
+          kubectl apply --dry-run=client -f k8s/ingress.yaml
