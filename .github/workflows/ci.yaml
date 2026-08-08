@@ -50,19 +50,16 @@ jobs:
           push: false
           tags: local/container-platform-frontend:test
 
-      # --- 3. Kubernetes Manifests Validation ---
+# --- 3. Kubernetes Manifests Validation ---
       - name: Set up Kubectl
         uses: azure/setup-kubectl@v3
-
-      - name: Validate Kubernetes YAML Manifests
-        uses: stefanprodan/kube-tools@v1
         with:
-          kubectl: 1.28.0
-          command: version
-      
+          version: 'latest'
+
       - name: Dry-Run Manifests
         run: |
           echo "==> Running dry-run check on K8s manifests..."
+          kubectl version --client
           kubectl apply --dry-run=client -f k8s/namespace.yaml
           kubectl apply --dry-run=client -f k8s/configmap.yaml
           kubectl apply --dry-run=client -f k8s/secrets.yaml
