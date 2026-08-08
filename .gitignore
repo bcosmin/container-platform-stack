@@ -1,0 +1,58 @@
+# Generic
+.DS_Store
+.env
+.env.*
+.vscode/
+.idea/
+*.log
+*.tmp
+*.swp
+*~
+*.bak
+*.swo
+
+# Build artifacts
+target/
+build/
+dist/
+bin/
+out/
+
+# Dependencies
+node_modules/
+vendor/
+venv/
+.venv/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+hs_err_pid*
+.gradle/
+.project
+.classpath
+.settings/
+bin/
+tmp/
+*.iml
+*.iws
+*.ipr
+
+# Python
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# Go
+*.exe
+*.test
+*.prof
+
+# Docker
+*.dockerignore
+*.env

@@ -1,0 +1,10 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: platform-config
+  namespace: container-platform
+data:
+  DATABASE_HOST: "postgress-service"
+  DATABASE_PORT: "5432"
+  DATABASE_NAME: "platform_demo_db"
