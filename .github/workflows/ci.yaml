@@ -50,13 +50,11 @@ jobs:
           push: false
           tags: local/container-platform-frontend:test
 
-      # --- 3. Kubernetes Local Cluster (KIND) & Dry-Run ---
+# --- 3. Kubernetes Local Cluster (KIND) & Dry-Run ---
       - name: Set up Kubernetes Cluster (KIND)
-        uses: engineerd/setup-kind@v5
-        with:
-          version: v0.22.0
+        uses: helm/kind-action@v1.7.0
 
-      - name: Test Cluster Connection
+      - name: Verify Kubernetes Cluster
         run: |
           kubectl cluster-info
           kubectl get nodes
