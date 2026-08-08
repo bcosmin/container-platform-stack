@@ -61,8 +61,10 @@ jobs:
 
       - name: Run Server-Side Dry-Run on Manifests
         run: |
-          echo "==> Running server-side dry-run check on K8s manifests..."
-          kubectl apply --dry-run=server -f k8s/namespace.yaml
+          echo "==> Preparing cluster namespace..."
+          kubectl apply -f k8s/namespace.yaml
+
+          echo "==> Running server-side dry-run on manifests..."
           kubectl apply --dry-run=server -f k8s/configmap.yaml
           kubectl apply --dry-run=server -f k8s/secrets.yaml
           kubectl apply --dry-run=server -f k8s/database/
