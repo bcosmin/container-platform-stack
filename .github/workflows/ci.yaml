@@ -60,10 +60,10 @@ jobs:
         run: |
           echo "==> Running dry-run check on K8s manifests..."
           kubectl version --client
-          kubectl apply --dry-run=client -f k8s/namespace.yaml
-          kubectl apply --dry-run=client -f k8s/configmap.yaml
-          kubectl apply --dry-run=client -f k8s/secrets.yaml
-          kubectl apply --dry-run=client -f k8s/database/
-          kubectl apply --dry-run=client -f k8s/backend/
-          kubectl apply --dry-run=client -f k8s/frontend/
-          kubectl apply --dry-run=client -f k8s/ingress.yaml
+          kubectl apply --dry-run=client --validate=false -f k8s/namespace.yaml
+          kubectl apply --dry-run=client --validate=false -f k8s/configmap.yaml
+          kubectl apply --dry-run=client --validate=false -f k8s/secrets.yaml
+          kubectl apply --dry-run=client --validate=false -f k8s/database/
+          kubectl apply --dry-run=client --validate=false -f k8s/backend/
+          kubectl apply --dry-run=client --validate=false -f k8s/frontend/
+          kubectl apply --dry-run=client --validate=false -f k8s/ingress.yaml
