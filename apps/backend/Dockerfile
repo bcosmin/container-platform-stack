@@ -1,7 +1,10 @@
 # --- Stage 1: Builder ---
-FROM ghcr.io/astral-sh/uv:python3.12-slim-bookworm AS builder
+FROM python:3.12-slim-bookworm AS builder
 
 WORKDIR /app
+
+# Install build dependencies
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 ENV UV_COMPILE_BYTECODE=1
 ENV UV_NO_CACHE=1
